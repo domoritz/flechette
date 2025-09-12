@@ -25,9 +25,9 @@ import { decodeSchema } from './schema.js';
  * @returns {import('../types.js').ArrowData}
  */
 export function decodeIPC(data) {
-  const source = data instanceof ArrayBuffer || (crossOriginIsolated && data instanceof SharedArrayBuffer)
-    ? new Uint8Array(data)
-    : data;
+  const source = Array.isArray(data) || ArrayBuffer.isView(data)
+    ? data
+    : new Uint8Array(data);
   return source instanceof Uint8Array && isArrowFileFormat(source)
     ? decodeIPCFile(source)
     : decodeIPCStream(source);
